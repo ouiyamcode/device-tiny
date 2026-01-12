@@ -1,0 +1,45 @@
+[package]
+name = "device-tiny"
+version = "0.1.0"
+authors = ["ouiyamcode <williaminiziato54@gmail.com>"]
+edition = "2021"
+resolver = "2"
+rust-version = "1.77"
+
+[[bin]]
+name = "device-tiny"
+harness = false # do not use the built-in cargo test harness -> resolve rust-analyzer errors
+
+[profile.release]
+opt-level = "s"
+
+[profile.dev]
+debug = true    # Symbols are nice, and they don't increase the size on Flash
+opt-level = "z"
+
+[features]
+default = []
+
+experimental = ["esp-idf-svc/experimental"]
+
+[dependencies]
+log = "0.4"
+esp-idf-svc = "0.51"
+esp-idf-sys = { version = "0.36", features = ["native"] }
+
+[build-dependencies]
+embuild = "0.33"
+
+[[package.metadata.esp-idf-sys.extra_components]]
+remote_component = { name = "espressif/tinyusb", version = "0.17.0~2" }
+
+[[package.metadata.esp-idf-sys.extra_components]]
+component_dirs = ["src/esp-usb/device/esp_tinyusb"]
+bindings_header = "src/esp-usb/device/esp_tinyusb/bindings.h"
+bindings_module = "esp_tinyusb"
+bindings_include_dirs = [
+    "src/esp-usb/device/esp_tinyusb/include",
+    "src/esp-usb/device/esp_tinyusb/include_private",   
+]
+
+
